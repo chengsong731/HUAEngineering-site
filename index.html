@@ -58,6 +58,18 @@
     }
     .nav-cta:hover { background: var(--navy-light) !important; }
 
+    /* ── LANG TOGGLE ─────────────────────────── */
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .lang-btn {
+      display: flex; align-items: center; gap: .4rem;
+      font-family: inherit; font-size: .8rem; font-weight: 600;
+      color: var(--navy); background: none;
+      border: 1px solid var(--gray-mid); border-radius: 3px;
+      padding: .375rem .75rem; cursor: pointer; white-space: nowrap;
+      transition: border-color .2s, background .2s; line-height: 1;
+    }
+    .lang-btn:hover { border-color: var(--navy); background: var(--gray-light); }
+
     /* ── HERO ────────────────────────────────── */
     .hero {
       position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden;
@@ -290,13 +302,19 @@
         <span class="nav-logo-sub">Engineering Group</span>
       </div>
     </a>
-    <ul class="nav-links">
-      <li><a href="#services">Services</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#team">Team</a></li>
-      <li><a href="#licenses">Licenses</a></li>
-      <li><a href="#contact" class="nav-cta">Get in Touch</a></li>
-    </ul>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#licenses">Licenses</a></li>
+        <li><a href="#contact" class="nav-cta">Get in Touch</a></li>
+      </ul>
+      <button class="lang-btn" onclick="toggleLang()" title="Switch language">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span id="lang-label">中文</span>
+      </button>
+    </div>
   </div>
 </nav>
 
@@ -637,7 +655,203 @@ mapRows.forEach(row => {
   mapEl.appendChild(rowEl);
 });
 
-// 5. CONTACT FORM
+// 5. LANGUAGE TOGGLE
+const translations = {
+  en: {
+    logoSub:'Engineering Group',
+    navServices:'Services', navProjects:'Projects', navTeam:'Team', navLicenses:'Licenses', navCta:'Get in Touch',
+    heroEyebrow:'Multidisciplinary Engineering & Architecture',
+    heroH1:'Complete Engineering<br>for Industrial Scale',
+    heroSub:'Every discipline — Architecture, Structural, Civil, MEP, Process, and BIM — led by licensed professionals with 15–25+ years of U.S. project experience.',
+    tagArch:'Architecture', tagStruct:'Structural Engineering', tagCivil:'Civil Engineering',
+    tagMep:'MEP', tagProcess:'Process & Environmental', tagBim:'BIM / CAD',
+    btnWork:'View Our Work', btnContact:'Get in Touch', scroll:'Scroll',
+    numDisc:'Engineering Disciplines', numStaff:'Total Staff Capacity', numYears:'Years of Experience', numPrograms:'Programs Delivered',
+    svcLabel:'What We Do', svcH2:'Our Disciplines', svcSub:'Every project is led by a licensed PE, SE, or Architect — not delegated down.',
+    svcArchH3:'Architecture', svcArchP:'Industrial facilities, commercial developments, entitlement & full construction documentation.',
+    svcStructH3:'Structural Engineering', svcStructP:'Seismic design, heavy foundations, industrial & energy infrastructure, and structural retrofit.',
+    svcCivilH3:'Civil Engineering', svcCivilP:'Site grading, hydrology, stormwater management & utility infrastructure for industrial and commercial sites.',
+    svcMepH3:'MEP Engineering', svcMepP:'HVAC, plumbing, power distribution & fire-life safety for manufacturing and commercial facilities.',
+    svcProcessH3:'Process & Environmental', svcProcessP:'Water/wastewater systems, industrial utilities, biofuel plants & environmental permitting.',
+    svcBimH3:'CAD / BIM', svcBimP:'3D modeling, pipe support design & BIM coordination for energy, oil & gas, and process facilities.',
+    projLabel:'Portfolio', projH2:'Selected Projects', projSub:'Factories · Energy Plants · Utility Infrastructure · Commercial Landmarks',
+    filterAll:'All Projects', filterIndustrial:'Industrial & Manufacturing', filterEnergy:'Energy & Utilities', filterCommercial:'Commercial',
+    tagIndustrial:'Industrial & Manufacturing', tagEnergy:'Energy & Utilities', tagCommercial:'Commercial',
+    clientsLabel:'Track Record', clientsH2:"Companies We've Worked With", clientsSub:'Trusted by industry leaders across energy, infrastructure, entertainment, and manufacturing.',
+    teamLabel:'Leadership', teamH2:'Our Core Team', teamSub:'Licensed professionals who lead — not managers who coordinate.',
+    pedramTitle:'Principal Architect', pedramExp:'25+ years experience', pedramSpec:'Industrial facilities, large-scale commercial, entitlement & construction documentation',
+    mkTitle:'Principal Civil / Structural', mkExp:'24+ years experience', mkSpec:'Seismic design, heavy foundations, $2B+ energy & industrial programs',
+    jcTitle:'Principal Structural Engineer', jcExp:'11+ years experience', jcSpec:'Gigafactories, battery plants, stadiums, utility infrastructure, seismic retrofit',
+    csTitle:'Principal Structural Engineer', csExp:'11+ years experience', csSpec:'Industrial & residential design, advanced structural analysis, BIM & process support',
+    jkTitle:'Senior Mechanical Engineer', jkExp:'20+ years experience', jkSpec:'Industrial piping, compressor stations, power plants, CAESAR II pipe stress analysis',
+    fmTitle:'Senior Electrical Engineer', fmExp:'23+ years experience', fmSpec:'High-voltage substations (4kV–500kV), protection & control, SCADA systems',
+    aliTitle:'Environmental & Process Engineer', aliExp:'18+ years experience', aliSpec:'Water & wastewater, biofuel plants, SCR emission control, environmental permitting',
+    partnerLbl:'Design Partners', partnerDesc:'5 affiliated firms · 60+ total staff · Southern California & nationwide',
+    licLabel:'Geographic Reach', licH2:'Licensed Across the U.S.', licSub:'Our team holds active PE and SE licenses across 18+ states, enabling us to deliver projects nationwide.',
+    licMapNote:'Hover over highlighted states to see active licenses.',
+    licSe:'SE — Structural Engineer', licCivil:'PE — Civil Engineer', licMech:'PE — Mechanical Engineer', licElec:'PE — Electrical Engineer', licChem:'PE — Chemical Engineer',
+    delLabel:'Our Model', delH2:'How We Deliver', delSub:'Expert-led. Technically strong. Execution-focused.',
+    delP1:'HUA leads every discipline with a licensed PE, SE, or AIA Architect. Our design partner network provides production scale and specialized depth — all integrated under a single point of accountability.',
+    delP2:'This model gives clients the technical depth of a large firm with the responsiveness and owner-alignment of a principal-led practice. We carry projects from concept through commissioning, across all six disciplines, under U.S. codes — CBC, NEC, ASCE, ACI, ASME.',
+    delCallout:'"Every drawing that leaves HUA is reviewed and sealed by a licensed professional — not passed up a ladder."',
+    disc1:'Architecture', disc2:'Structural Engineering', disc3:'Civil Engineering', disc4:'MEP Engineering', disc5:'Process & Environmental', disc6:'CAD / BIM',
+    contactLabel:'Work With Us', contactH2:"Let's Work<br>Together",
+    contactP:"Tell us about your project. We'll follow up within one business day with the right discipline lead for your scope.",
+    contactLocation:'Southern California, United States', contactLicense:'Licensed in 18+ states across the U.S.',
+    fLblName:'Name', fLblCompany:'Company', fLblEmail:'Email', fLblType:'Project Type', fLblDesc:'Project Description',
+    fPhName:'Your name', fPhCompany:'Company name', fPhEmail:'your@email.com', fPhMsg:'Tell us about your project scope, location, and timeline…',
+    fOptDefault:'Select a category…', fOpt1:'Industrial & Manufacturing', fOpt2:'Energy & Utilities', fOpt3:'Water & Process', fOpt4:'Commercial Development', fOpt5:'Other',
+    fSubmit:'Send Message →',
+    footerSub:'Engineering Group', footerCopy:'© 2025 HUA Engineering Group. All rights reserved.',
+    footerServices:'Services', footerProjects:'Projects', footerTeam:'Team', footerLicenses:'Licenses', footerContact:'Contact',
+  },
+  zh: {
+    logoSub:'工程集团',
+    navServices:'服务', navProjects:'项目', navTeam:'团队', navLicenses:'执照', navCta:'联系我们',
+    heroEyebrow:'多学科工程与建筑设计',
+    heroH1:'为工业规模提供<br>完整工程解决方案',
+    heroSub:'每个专业——建筑、结构、土木、机电、工艺及BIM——均由持有美国执照、拥有15至25年以上项目经验的专业人士主导。',
+    tagArch:'建筑', tagStruct:'结构工程', tagCivil:'土木工程',
+    tagMep:'机电工程', tagProcess:'工艺与环境', tagBim:'BIM / CAD',
+    btnWork:'查看项目', btnContact:'联系我们', scroll:'向下',
+    numDisc:'工程专业', numStaff:'团队规模', numYears:'从业年限', numPrograms:'项目总额',
+    svcLabel:'我们的服务', svcH2:'专业领域', svcSub:'每个项目由持证PE、SE或建筑师主导——而非层层转包。',
+    svcArchH3:'建筑设计', svcArchP:'工业厂房、商业开发、规划审批及完整施工文件。',
+    svcStructH3:'结构工程', svcStructP:'抗震设计、重型基础、工业与能源基础设施及结构加固。',
+    svcCivilH3:'土木工程', svcCivilP:'场地平整、水文分析、雨洪管理及工业和商业用地公用管线基础设施。',
+    svcMepH3:'机电工程', svcMepP:'制造及商业设施的暖通空调、给排水、配电及消防生命安全系统。',
+    svcProcessH3:'工艺与环境工程', svcProcessP:'给排水系统、工业公用工程、生物燃料工厂及环境许可。',
+    svcBimH3:'CAD / BIM', svcBimP:'能源、油气及工艺设施的三维建模、管道支架设计与BIM协调。',
+    projLabel:'项目案例', projH2:'精选项目', projSub:'工厂 · 能源设施 · 公用基础设施 · 商业地标',
+    filterAll:'全部项目', filterIndustrial:'工业与制造', filterEnergy:'能源与公用事业', filterCommercial:'商业',
+    tagIndustrial:'工业与制造', tagEnergy:'能源与公用事业', tagCommercial:'商业',
+    clientsLabel:'合作记录', clientsH2:'合作客户', clientsSub:'受到能源、基础设施、娱乐及制造业领军企业的信赖。',
+    teamLabel:'团队领导', teamH2:'核心团队', teamSub:'由持证专业人士主导——而非协调型管理者。',
+    pedramTitle:'主任建筑师', pedramExp:'25年以上经验', pedramSpec:'工业厂房、大型商业项目、规划审批及施工文件',
+    mkTitle:'主任土木/结构工程师', mkExp:'24年以上经验', mkSpec:'抗震设计、重型基础、逾20亿美元能源与工业项目',
+    jcTitle:'主任结构工程师', jcExp:'11年以上经验', jcSpec:'超级工厂、电池工厂、体育场、公用基础设施、抗震加固',
+    csTitle:'主任结构工程师', csExp:'11年以上经验', csSpec:'工业与住宅设计、高级结构分析、BIM与工艺支持',
+    jkTitle:'高级机械工程师', jkExp:'20年以上经验', jkSpec:'工业管道、压缩机站、发电厂、CAESAR II管道应力分析',
+    fmTitle:'高级电气工程师', fmExp:'23年以上经验', fmSpec:'高压变电站（4kV–500kV）、保护与控制、SCADA系统',
+    aliTitle:'环境与工艺工程师', aliExp:'18年以上经验', aliSpec:'给排水、生物燃料工厂、SCR脱硝控制、环境许可',
+    partnerLbl:'设计合作伙伴', partnerDesc:'5家联盟公司 · 60余名员工 · 南加州及全国范围',
+    licLabel:'覆盖范围', licH2:'执照覆盖全美', licSub:'我们团队在全美18个以上州持有有效PE及SE执照，可在全国范围内承接项目。',
+    licMapNote:'将鼠标悬停在高亮州份上查看有效执照。',
+    licSe:'SE — 结构工程师', licCivil:'PE — 土木工程师', licMech:'PE — 机械工程师', licElec:'PE — 电气工程师', licChem:'PE — 化学工程师',
+    delLabel:'我们的模式', delH2:'服务模式', delSub:'专家主导 · 技术深厚 · 执行专注',
+    delP1:'HUA的每个专业均由持证PE、SE或AIA建筑师主导。我们的设计合作伙伴网络提供生产规模和专业深度——全部在统一责任主体下整合。',
+    delP2:'这一模式为客户提供大型事务所的技术深度，同时兼具主责制实践的响应速度和对业主利益的高度对齐。我们从方案到竣工全程跟进项目，覆盖六个专业，遵循美国规范——CBC、NEC、ASCE、ACI、ASME。',
+    delCallout:'"每一张从HUA发出的图纸，均由持证专业人士审核并加章——而非层层上报。"',
+    disc1:'建筑设计', disc2:'结构工程', disc3:'土木工程', disc4:'机电工程', disc5:'工艺与环境工程', disc6:'CAD / BIM',
+    contactLabel:'与我们合作', contactH2:'期待合作',
+    contactP:'请告诉我们您的项目需求，我们将在一个工作日内由对应专业负责人与您跟进。',
+    contactLocation:'美国南加州', contactLicense:'执照覆盖全美18个以上州',
+    fLblName:'姓名', fLblCompany:'公司', fLblEmail:'邮箱', fLblType:'项目类型', fLblDesc:'项目描述',
+    fPhName:'您的姓名', fPhCompany:'公司名称', fPhEmail:'your@email.com', fPhMsg:'请描述您的项目范围、地点及时间要求……',
+    fOptDefault:'请选择类别……', fOpt1:'工业与制造', fOpt2:'能源与公用事业', fOpt3:'水务与工艺', fOpt4:'商业开发', fOpt5:'其他',
+    fSubmit:'发送消息 →',
+    footerSub:'工程集团', footerCopy:'© 2025 HUA 工程集团。保留所有权利。',
+    footerServices:'服务', footerProjects:'项目', footerTeam:'团队', footerLicenses:'执照', footerContact:'联系',
+  }
+};
+let currentLang = 'en';
+function setLang(lang) {
+  currentLang = lang;
+  const t = translations[lang];
+  document.documentElement.lang = lang === 'zh' ? 'zh' : 'en';
+  document.getElementById('lang-label').textContent = lang === 'en' ? '中文' : 'EN';
+  // Nav
+  document.querySelector('.nav-logo-sub').textContent = t.logoSub;
+  const navLis = document.querySelectorAll('.nav-links li a');
+  [t.navServices, t.navProjects, t.navTeam, t.navLicenses, t.navCta].forEach((txt, i) => { if (navLis[i]) navLis[i].textContent = txt; });
+  // Hero
+  document.querySelector('.hero-eyebrow').textContent = t.heroEyebrow;
+  document.querySelector('.hero h1').innerHTML = t.heroH1;
+  document.querySelector('.hero-sub').textContent = t.heroSub;
+  const heroTags = document.querySelectorAll('.hero-tag');
+  [t.tagArch, t.tagStruct, t.tagCivil, t.tagMep, t.tagProcess, t.tagBim].forEach((txt, i) => { if (heroTags[i]) heroTags[i].textContent = txt; });
+  document.querySelector('.btn-white').textContent = t.btnWork;
+  document.querySelector('.btn-outline').textContent = t.btnContact;
+  document.querySelector('.hero-scroll span').textContent = t.scroll;
+  // Numbers
+  const numLbls = document.querySelectorAll('.number-lbl');
+  [t.numDisc, t.numStaff, t.numYears, t.numPrograms].forEach((txt, i) => { if (numLbls[i]) numLbls[i].textContent = txt; });
+  // Services
+  const svcSec = document.querySelector('.services');
+  svcSec.querySelector('.sec-label').textContent = t.svcLabel;
+  svcSec.querySelector('.sec-h2').textContent = t.svcH2;
+  svcSec.querySelector('.sec-sub').textContent = t.svcSub;
+  const svcCards = document.querySelectorAll('.svc-card');
+  [[t.svcArchH3, t.svcArchP],[t.svcStructH3, t.svcStructP],[t.svcCivilH3, t.svcCivilP],[t.svcMepH3, t.svcMepP],[t.svcProcessH3, t.svcProcessP],[t.svcBimH3, t.svcBimP]].forEach(([h, p], i) => { if (svcCards[i]) { svcCards[i].querySelector('h3').textContent = h; svcCards[i].querySelector('p').textContent = p; } });
+  // Projects
+  const projSec = document.querySelector('.projects');
+  projSec.querySelector('.sec-label').textContent = t.projLabel;
+  projSec.querySelector('.sec-h2').textContent = t.projH2;
+  projSec.querySelector('.sec-sub').textContent = t.projSub;
+  const fBtns = document.querySelectorAll('.f-btn');
+  [t.filterAll, t.filterIndustrial, t.filterEnergy, t.filterCommercial].forEach((txt, i) => { if (fBtns[i]) fBtns[i].textContent = txt; });
+  const projTags = document.querySelectorAll('.proj-tag');
+  [t.tagIndustrial, t.tagEnergy, t.tagCommercial, t.tagIndustrial, t.tagCommercial, t.tagCommercial].forEach((txt, i) => { if (projTags[i]) projTags[i].textContent = txt; });
+  // Clients
+  const clientsSec = document.querySelector('.clients');
+  clientsSec.querySelector('.sec-label').textContent = t.clientsLabel;
+  clientsSec.querySelector('.sec-h2').textContent = t.clientsH2;
+  clientsSec.querySelector('.sec-sub').textContent = t.clientsSub;
+  // Team
+  const teamSec = document.querySelector('.team');
+  teamSec.querySelector('.sec-label').textContent = t.teamLabel;
+  teamSec.querySelector('.sec-h2').textContent = t.teamH2;
+  teamSec.querySelector('.sec-sub').textContent = t.teamSub;
+  const teamCards = document.querySelectorAll('.team-card');
+  [{title:t.pedramTitle,exp:t.pedramExp,spec:t.pedramSpec},{title:t.mkTitle,exp:t.mkExp,spec:t.mkSpec},{title:t.jcTitle,exp:t.jcExp,spec:t.jcSpec},{title:t.csTitle,exp:t.csExp,spec:t.csSpec},{title:t.jkTitle,exp:t.jkExp,spec:t.jkSpec},{title:t.fmTitle,exp:t.fmExp,spec:t.fmSpec},{title:t.aliTitle,exp:t.aliExp,spec:t.aliSpec}].forEach((d, i) => {
+    const c = teamCards[i]; if (!c) return;
+    const te = c.querySelector('.team-title'); const ee = c.querySelector('.team-exp'); const se = c.querySelector('.team-spec');
+    if (te) te.textContent = d.title; if (ee) ee.textContent = d.exp; if (se) se.textContent = d.spec;
+  });
+  const partnerCard = teamCards[7];
+  if (partnerCard) { const divs = partnerCard.querySelectorAll('div'); if (divs[0]) divs[0].textContent = t.partnerLbl; if (divs[1]) divs[1].textContent = t.partnerDesc; }
+  // Licenses
+  const licSec = document.querySelector('.licenses');
+  licSec.querySelector('.sec-label').textContent = t.licLabel;
+  licSec.querySelector('.sec-h2').textContent = t.licH2;
+  licSec.querySelector('.sec-sub').textContent = t.licSub;
+  const mapNote = document.querySelector('.tile-map + p'); if (mapNote) mapNote.textContent = t.licMapNote;
+  const licTitles = document.querySelectorAll('.lic-title');
+  [t.licSe, t.licCivil, t.licMech, t.licElec, t.licChem].forEach((txt, i) => { if (licTitles[i]) licTitles[i].textContent = txt; });
+  // Delivery
+  const delSec = document.querySelector('.delivery');
+  delSec.querySelector('.sec-label').textContent = t.delLabel;
+  delSec.querySelector('.sec-h2').textContent = t.delH2;
+  delSec.querySelector('.sec-sub').textContent = t.delSub;
+  const delPs = delSec.querySelectorAll('.delivery-copy > p');
+  if (delPs[0]) delPs[0].textContent = t.delP1; if (delPs[1]) delPs[1].textContent = t.delP2;
+  const calloutP = delSec.querySelector('.delivery-callout p'); if (calloutP) calloutP.textContent = t.delCallout;
+  const discNames = delSec.querySelectorAll('.disc-name');
+  [t.disc1, t.disc2, t.disc3, t.disc4, t.disc5, t.disc6].forEach((txt, i) => { if (discNames[i]) discNames[i].textContent = txt; });
+  // Contact
+  const contSec = document.querySelector('.contact');
+  contSec.querySelector('.sec-label').textContent = t.contactLabel;
+  contSec.querySelector('.contact-intro h2').innerHTML = t.contactH2;
+  const contPs = contSec.querySelectorAll('.contact-intro p'); if (contPs[1]) contPs[1].textContent = t.contactP;
+  const cRows = contSec.querySelectorAll('.c-info-row span');
+  if (cRows[1]) cRows[1].textContent = t.contactLocation; if (cRows[2]) cRows[2].textContent = t.contactLicense;
+  const fLabels = contSec.querySelectorAll('.f-lbl');
+  [t.fLblName, t.fLblCompany, t.fLblEmail, t.fLblType, t.fLblDesc].forEach((txt, i) => { if (fLabels[i]) fLabels[i].textContent = txt; });
+  const fIns = contSec.querySelectorAll('.f-in');
+  if (fIns[0]) fIns[0].placeholder = t.fPhName; if (fIns[1]) fIns[1].placeholder = t.fPhCompany; if (fIns[2]) fIns[2].placeholder = t.fPhEmail;
+  const fTa = contSec.querySelector('.f-ta'); if (fTa) fTa.placeholder = t.fPhMsg;
+  const opts = contSec.querySelectorAll('.f-sel option');
+  [t.fOptDefault, t.fOpt1, t.fOpt2, t.fOpt3, t.fOpt4, t.fOpt5].forEach((txt, i) => { if (opts[i]) opts[i].textContent = txt; });
+  const subBtn = contSec.querySelector('.f-submit'); if (subBtn && !subBtn.disabled) subBtn.textContent = t.fSubmit;
+  // Footer
+  document.querySelector('.footer-logo-sub').textContent = t.footerSub;
+  document.querySelector('.footer-copy').textContent = t.footerCopy;
+  const footerLinks = document.querySelectorAll('.footer-links a');
+  [t.footerServices, t.footerProjects, t.footerTeam, t.footerLicenses, t.footerContact].forEach((txt, i) => { if (footerLinks[i]) footerLinks[i].textContent = txt; });
+}
+function toggleLang() { setLang(currentLang === 'en' ? 'zh' : 'en'); }
+
+// 6. CONTACT FORM
 async function handleSubmit(e) {
   e.preventDefault();
   const form = e.target;
