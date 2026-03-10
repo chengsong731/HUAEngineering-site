@@ -544,10 +544,10 @@
       </div>
       <div class="fade-up delay-2">
         <form class="c-form" onsubmit="handleSubmit(event)">
-          <div class="f-row"><div class="f-grp"><label class="f-lbl">Name</label><input type="text" class="f-in" placeholder="Your name" required/></div><div class="f-grp"><label class="f-lbl">Company</label><input type="text" class="f-in" placeholder="Company name"/></div></div>
-          <div class="f-grp"><label class="f-lbl">Email</label><input type="email" class="f-in" placeholder="your@email.com" required/></div>
-          <div class="f-grp"><label class="f-lbl">Project Type</label><select class="f-sel"><option value="">Select a category…</option><option>Industrial &amp; Manufacturing</option><option>Energy &amp; Utilities</option><option>Water &amp; Process</option><option>Commercial Development</option><option>Other</option></select></div>
-          <div class="f-grp"><label class="f-lbl">Project Description</label><textarea class="f-ta" placeholder="Tell us about your project scope, location, and timeline…"></textarea></div>
+          <div class="f-row"><div class="f-grp"><label class="f-lbl">Name</label><input type="text" name="name" class="f-in" placeholder="Your name" required/></div><div class="f-grp"><label class="f-lbl">Company</label><input type="text" name="company" class="f-in" placeholder="Company name"/></div></div>
+          <div class="f-grp"><label class="f-lbl">Email</label><input type="email" name="email" class="f-in" placeholder="your@email.com" required/></div>
+          <div class="f-grp"><label class="f-lbl">Project Type</label><select name="project_type" class="f-sel"><option value="">Select a category…</option><option>Industrial &amp; Manufacturing</option><option>Energy &amp; Utilities</option><option>Water &amp; Process</option><option>Commercial Development</option><option>Other</option></select></div>
+          <div class="f-grp"><label class="f-lbl">Project Description</label><textarea name="message" class="f-ta" placeholder="Tell us about your project scope, location, and timeline…"></textarea></div>
           <button type="submit" class="f-submit">Send Message →</button>
         </form>
       </div>
@@ -638,11 +638,29 @@ mapRows.forEach(row => {
 });
 
 // 5. CONTACT FORM
-function handleSubmit(e) {
+async function handleSubmit(e) {
   e.preventDefault();
-  const btn = e.target.querySelector('.f-submit');
-  btn.textContent = 'Message Sent ✓'; btn.style.background = '#2a6b3a';
-  setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; e.target.reset(); }, 3500);
+  const form = e.target;
+  const btn = form.querySelector('.f-submit');
+  btn.textContent = 'Sending…'; btn.disabled = true;
+  try {
+    const res = await fetch('https://formspree.io/f/xeeralge', {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      btn.textContent = 'Message Sent ✓'; btn.style.background = '#2a6b3a';
+      form.reset();
+      setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; btn.disabled = false; }, 4000);
+    } else {
+      btn.textContent = 'Error — Try Again'; btn.style.background = '#a33';
+      setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; btn.disabled = false; }, 3000);
+    }
+  } catch {
+    btn.textContent = 'Error — Try Again'; btn.style.background = '#a33';
+    setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; btn.disabled = false; }, 3000);
+  }
 }
 </script>
 </body>
