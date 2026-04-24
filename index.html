@@ -530,10 +530,10 @@
       <div><div class="tile-map" id="tileMap"></div><p style="font-size:.75rem;color:var(--gray);margin-top:1rem;">Hover over highlighted states to see active licenses.</p></div>
       <div class="lic-legend fade-up delay-2">
 <div class="lic-item"><div class="lic-title">SE — Structural Engineer</div><div class="lic-states"><span class="st-badge">CA</span><span class="st-badge">HI</span></div></div>
-        <div class="lic-item"><div class="lic-title">PE — Civil Engineer</div><div class="lic-states"><span class="st-badge">CA</span><span class="st-badge">WA</span><span class="st-badge">AZ</span><span class="st-badge">NV</span><span class="st-badge">OH</span><span class="st-badge">FL</span><span class="st-badge">UT</span><span class="st-badge">CO</span><span class="st-badge">MS</span><span class="st-badge">VI</span></div></div>
+        <div class="lic-item"><div class="lic-title">PE — Civil Engineer</div><div class="lic-states"><span class="st-badge">CA</span><span class="st-badge">WA</span><span class="st-badge">AZ</span><span class="st-badge">NV</span><span class="st-badge">OH</span><span class="st-badge">FL</span><span class="st-badge">UT</span><span class="st-badge">CO</span><span class="st-badge">MS</span><span class="st-badge">VI</span><span class="st-badge">TX</span></div></div>
         <div class="lic-item"><div class="lic-title">PE — Mechanical Engineer</div><div class="lic-states"><span class="st-badge">CA</span><span class="st-badge">CO</span><span class="st-badge">ID</span><span class="st-badge">NV</span><span class="st-badge">NM</span><span class="st-badge">OR</span><span class="st-badge">SC</span><span class="st-badge">VA</span><span class="st-badge">WA</span><span class="st-badge">KY</span><span class="st-badge">AZ</span><span class="st-badge">FL</span><span class="st-badge">HI</span><span class="st-badge">TX</span></div></div>
         <div class="lic-item"><div class="lic-title">PE — Electrical Engineer</div><div class="lic-states"><span class="st-badge">CA</span><span class="st-badge">ID</span><span class="st-badge">HI</span><span class="st-badge">KY</span><span class="st-badge">NV</span><span class="st-badge">NM</span><span class="st-badge">OR</span><span class="st-badge">SC</span><span class="st-badge">TX</span><span class="st-badge">UT</span><span class="st-badge">FL</span><span class="st-badge">AZ</span></div></div>
-        <div class="lic-item"><div class="lic-title">PE — Chemical Engineer</div><div class="lic-states"><span class="st-badge">CA</span></div></div>
+        <div class="lic-item"><div class="lic-title">PE — Process/Plumbing Engineer</div><div class="lic-states"><span class="st-badge">CA</span><span class="st-badge">TX</span></div></div>
       </div>
     </div>
   </div>
@@ -637,7 +637,7 @@ document.querySelectorAll('.f-btn').forEach(btn => {
 
 // 4. STATE TILE MAP
 const licenseData = {
-  CA:['SE Structural','PE Civil','PE Mechanical','PE Electrical','PE Chemical'],
+  CA:['SE Structural','PE Civil','PE Mechanical','PE Electrical','PE Process/Plumbing'],
   HI:['SE Structural','PE Civil','PE Mechanical','PE Electrical'],
   WA:['PE Civil','PE Mechanical'], AZ:['PE Civil','PE Mechanical','PE Electrical'],
   NV:['PE Civil','PE Mechanical','PE Electrical'], OH:['PE Civil'],
@@ -645,7 +645,7 @@ const licenseData = {
   CO:['PE Civil','PE Mechanical'], MS:['PE Civil'],
   ID:['PE Mechanical','PE Electrical'], NM:['PE Mechanical','PE Electrical'],
   OR:['PE Mechanical','PE Electrical'], SC:['PE Mechanical','PE Electrical'],
-  VA:['PE Mechanical'], KY:['PE Mechanical','PE Electrical'], TX:['PE Mechanical','PE Electrical'],
+  VA:['PE Mechanical'], KY:['PE Mechanical','PE Electrical'], TX:['PE Civil','PE Mechanical','PE Electrical','PE Process/Plumbing'],
 };
 const mapRows = [
   ['','','','','','','','','','','','ME'],
@@ -708,7 +708,7 @@ const translations = {
     partnerLbl:'Design Partners', partnerDesc:'5 affiliated firms · 60+ total staff · Southern California & nationwide',
     licLabel:'Geographic Reach', licH2:'Licensed Across the U.S.', licSub:'Our team holds active PE and SE licenses across 18+ states, enabling us to deliver projects nationwide.',
     licMapNote:'Hover over highlighted states to see active licenses.',
-    licSe:'SE — Structural Engineer', licCivil:'PE — Civil Engineer', licMech:'PE — Mechanical Engineer', licElec:'PE — Electrical Engineer', licChem:'PE — Chemical Engineer',
+    licSe:'SE — Structural Engineer', licCivil:'PE — Civil Engineer', licMech:'PE — Mechanical Engineer', licElec:'PE — Electrical Engineer', licChem:'PE — Process/Plumbing Engineer',
     delLabel:'Our Model', delH2:'How We Deliver', delSub:'Expert-led. Technically strong. Execution-focused.',
     delP1:'HUA leads every discipline with a licensed PE, SE, or AIA Architect. Our design partner network provides production scale and specialized depth — all integrated under a single point of accountability.',
     delP2:'This model gives clients the technical depth of a large firm with the responsiveness and owner-alignment of a principal-led practice. We carry projects from concept through commissioning, across all six disciplines, under U.S. codes — CBC, NEC, ASCE, ACI, ASME.',
@@ -756,7 +756,7 @@ const translations = {
     partnerLbl:'设计合作伙伴', partnerDesc:'5家联盟公司 · 60余名员工 · 南加州及全国范围',
     licLabel:'覆盖范围', licH2:'执照覆盖全美', licSub:'我们团队在全美18个以上州持有有效PE及SE执照，可在全国范围内承接项目。',
     licMapNote:'将鼠标悬停在高亮州份上查看有效执照。',
-    licSe:'SE — 结构工程师', licCivil:'PE — 土木工程师', licMech:'PE — 机械工程师', licElec:'PE — 电气工程师', licChem:'PE — 化学工程师',
+    licSe:'SE — 结构工程师', licCivil:'PE — 土木工程师', licMech:'PE — 机械工程师', licElec:'PE — 电气工程师', licChem:'PE — 工艺/给排水工程师',
     delLabel:'我们的模式', delH2:'服务模式', delSub:'专家主导 · 技术深厚 · 执行专注',
     delP1:'HUA的每个专业均由持证PE、SE或AIA建筑师主导。我们的设计合作伙伴网络提供生产规模和专业深度——全部在统一责任主体下整合。',
     delP2:'这一模式为客户提供大型事务所的技术深度，同时兼具主责制实践的响应速度和对业主利益的高度对齐。我们从方案到竣工全程跟进项目，覆盖六个专业，遵循美国规范——CBC、NEC、ASCE、ACI、ASME。',
